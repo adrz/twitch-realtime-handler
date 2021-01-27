@@ -1,0 +1,7 @@
+numpy
+streamlink
+opencv-python
+face_recognition
+fake_useragent
+pydub
+requests

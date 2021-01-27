@@ -99,6 +99,12 @@ class _TwitchHandlerGrabber(_TwitchHandler):
             in_bytes = self._fifo.get()
             return self._bytes_to_array(in_bytes)
 
+    def grab_raw(self) -> bytes:
+        if self._fifo.empty() and not self.blocking:
+            return None
+        else:
+            return self._fifo.get()
+
     def _bytes_to_array(self, in_bytes: bytes) -> np.array:
         """
         Args:
