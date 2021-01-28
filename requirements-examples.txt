@@ -5,3 +5,4 @@ face_recognition
 fake_useragent
 pydub
 requests
+twitchrealtimehandler

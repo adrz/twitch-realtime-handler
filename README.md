@@ -1,6 +1,7 @@
 [![Build
 Status](https://travis-ci.org/adrz/twitch-realtime-handler.svg?branch=master)](https://travis-ci.org/adrz/twitch-realtime-handler)
 [![codecov](https://codecov.io/gh/adrz/twitch-realtime-handler/branch/master/graph/badge.svg)](https://codecov.io/gh/adrz/twitch-realtime-handler)
+[![PyPI version fury.io](https://badge.fury.io/py/twitchrealtimehandler.svg)](https://pypi.python.org/pypi/twitchrealtimehandler/)
 
 
 # Description
@@ -26,9 +27,8 @@ pip install twitchrealtimehandler
 
 For latest development release,
 ```bash
-pip install git+git://github.com/jaidedai/easyocr.git
+pip install git+git://github.com:adrz/twitch-realtime-handler.git
 ```
-
 
 # Usage
 
@@ -60,4 +60,37 @@ frame = image_grabber.grab()
 image_grabber.terminate()  # stop the transcoding
 ```
 
+# Examples
 
+## Requirements
+
+Dependencies for face_recognition package:
+
+```bash
+sudo apt-get update
+sudo apt-get install build-essential cmake
+sudo apt-get install libopenblas-dev liblapack-dev 
+sudo apt-get install libx11-dev libgtk-3-dev
+sudo apt-get install python3 python3-dev python3-pip
+pip install -r requirements-examples.txt
+```
+
+## Real-time face detection
+
+```bash
+python examples/realtime-face-detection.py --twitch-url https://twitch.tv/yourfavouritetwitcher
+```
+[face-detection-senat](https://raw.githubusercontent.com/adrz/twitch-realtime-handler/master/demos/faces-detection.gif)
+
+
+## Real-time transcript
+
+```bash
+python examples/realtime-transcript.py --twitch-url https://twitch.tv/yourfavouritetwitcher
+```
+
+# Known issues
+
+[twitch-third-party](https://raw.githubusercontent.com/adrz/twitch-realtime-handler/master/demos/twitch-thirdparty.jpg)
+
+If you encounter this image, it means that twitch knows your not watching from its website. You'll get this message for a few seconds and the stream will resume.
