@@ -29,19 +29,15 @@ if __name__ == "__main__":
             print(f"inference time: {time.time()-t}")
 
             for face in face_locations:
-                # Extract the ROI of the face from the grayscale image, resize it to a fixed 28x28 pixels, and then prepare
-                # the ROI for classification via the CNN
                 top, right, bottom, left = face
                 img = cv2.rectangle(img,
                                     (left, top),
                                     (right, bottom),
                                     (0, 0, 255), 2)
-            cv2.imshow("frame", img)
+            cv2.imshow("frame", cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
             print(time.time()-previous_time)
             previous_time = time.time()
-            cv2.imwrite("imgs/img{}.jpg".format(str(i).zfill(5)), cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-            i += 1
     cv2.destroyAllWindows()
     img_grabber.terminate()

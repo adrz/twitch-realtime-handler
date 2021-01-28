@@ -6,7 +6,7 @@ Status](https://travis-ci.org/adrz/twitch-realtime-handler.svg?branch=master)](h
 
 # Description
 
-This package allows to extract in real-time frames or audio segments of a twitch stream as numpy array.
+This package allows to extract in real-time frames or audio segments of a twitch stream as a numpy array.
 It heavily relies on FFmpeg to decode on-the-fly and asynchronously the stream.
 Then the package stocks the frames or the audio segments into a fifo.
 

@@ -11,7 +11,7 @@ def readme():
 
 setuptools.setup(
     name="twitchrealtimehandler", 
-    version="0.0.1",
+    version="0.0.2",
     author="aDrz",
     author_email="adrien.nouvellet@gmail.com",
     description="Package to handle real-time frames or audio segments from a twitch stream",
