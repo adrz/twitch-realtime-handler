@@ -33,8 +33,8 @@ pip install git+git://github.com:adrz/twitch-realtime-handler.git
 # Usage
 
 ```python
-from twitchrealtimehandler.twitchgrabber import (TwitchAudioGrabber,
-                                                 TwitchImageGrabber)
+from twitchrealtimehandler import (TwitchAudioGrabber,
+                                   TwitchImageGrabber)
 import numpy as np
 
 audio_grabber = TwitchAudioGrabber(
@@ -80,7 +80,7 @@ pip install -r requirements-examples.txt
 ```bash
 python examples/realtime-face-detection.py --twitch-url https://twitch.tv/yourfavouritetwitcher
 ```
-[face-detection-senat](https://raw.githubusercontent.com/adrz/twitch-realtime-handler/master/demos/faces-detection.gif)
+![face-detection-senat](https://raw.githubusercontent.com/adrz/twitch-realtime-handler/master/demos/faces-detection.gif)
 
 
 ## Real-time transcript
@@ -91,6 +91,6 @@ python examples/realtime-transcript.py --twitch-url https://twitch.tv/yourfavour
 
 # Known issues
 
-[twitch-third-party](https://raw.githubusercontent.com/adrz/twitch-realtime-handler/master/demos/twitch-thirdparty.jpg)
+![twitch-third-party](https://raw.githubusercontent.com/adrz/twitch-realtime-handler/master/demos/twitch-thirdparty.jpg)
 
 If you encounter this image, it means that twitch knows your not watching from its website. You'll get this message for a few seconds and the stream will resume.

@@ -72,10 +72,11 @@ def api_speech(data, ua):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--twitch-url', type=str, help='url of the stream')
+    parser.add_argument('--segment-length', type=int, default=5, help='segment length in second to be transcript')
     opt = parser.parse_args()
     audio_grabber = TwitchAudioGrabber(twitch_url=opt.twitch_url,
                                        dtype=np.int16,
-                                       segment_length=5,
+                                       segment_length=opt.segment_length,
                                        channels=1,
                                        rate=16000)
 
