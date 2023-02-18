@@ -1,2 +1,1 @@
-from .twitchgrabber import (TwitchImageGrabber,
-                            TwitchAudioGrabber)
+from .twitchgrabber import TwitchAudioGrabber, TwitchImageGrabber
