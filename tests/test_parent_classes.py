@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from twitchrealtimehandler.twitchhandler import (_TwitchHandler,
-                                                 _TwitchHandlerAudio,
-                                                 _TwitchHandlerVideo,
-                                                 _TwitchHandlerGrabber)
 import pytest
+
+from twitchrealtimehandler.twitchhandler import (
+    _TwitchHandler,
+    _TwitchHandlerAudio,
+    _TwitchHandlerGrabber,
+    _TwitchHandlerVideo,
+)
 
 
 def test_twitch_handler():
@@ -16,8 +19,7 @@ def test_twitch_handler():
 
 
 def test_twitch_handler_audio():
-    handler = _TwitchHandlerAudio(rate=8000,
-                                  segment_length=4)
+    handler = _TwitchHandlerAudio(rate=8000, segment_length=4)
     assert handler.rate == 8000
     assert handler.segment_length == 4
     assert handler.quality == "audio_only"
