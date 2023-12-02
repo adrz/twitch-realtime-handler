@@ -3,6 +3,7 @@
 
 # Setuptools distribution folder.
 /dist/
+.venv/
 
 /src/pipe_stream
 
