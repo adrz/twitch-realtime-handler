@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "twitchrealtimehandler"
-version = "0.1.0"
+version = "0.1.1"
 description = "Package to handle real-time frames or audio segments from a twitch stream"
 authors = ["adrien. <adrien.nouvellet@gmail.com>"]
 readme = "README.md"
