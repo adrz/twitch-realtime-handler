@@ -1,6 +1,6 @@
 [project]
 name = "twitchrealtimehandler"
-version = "0.1.2"
+version = "0.2.0"
 description = "Package to handle real-time frames or audio segments from a twitch stream"
 authors = [{name = "adrien.", email = "adrien.nouvellet@gmail.com"}]
 readme = "README.md"
