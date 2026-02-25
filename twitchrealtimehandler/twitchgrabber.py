@@ -20,7 +20,7 @@ class TwitchAudioGrabber(_TwitchHandlerAudio, _TwitchHandlerGrabber):
     -----------
     channels: int
               number of channels (1 or 2)
-    dtype: np.type
+    dtype: np.dtype
            type of the array of the audio segment
     """
 
@@ -64,7 +64,7 @@ class TwitchAudioGrabber(_TwitchHandlerAudio, _TwitchHandlerGrabber):
         # quality requested
         # so sampling_rate*channels*n_bytes is the number of sample for 1 second
 
-        self._n_bytes_per_payload = (
+        self._n_bytes_per_payload = int(
             self.rate  # type: ignore
             * self.segment_length
             * self.channels
