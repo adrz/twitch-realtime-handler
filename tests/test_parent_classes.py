@@ -28,7 +28,7 @@ def test_twitch_handler_audio():
 def test_twitch_handler_video():
     handler = _TwitchHandlerVideo()
     with pytest.raises(AttributeError):
-        handler.segment_length
+        _ = handler.segment_length
 
 
 def test_twitch_handler_grabber():

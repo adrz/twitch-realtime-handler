@@ -15,9 +15,9 @@ import streamlink
 
 
 @dataclass
-class _TwitchHandler():
+class _TwitchHandler:
     twitch_url: Union[str, None] = None
-    chunk_size: int = 2 ** 8
+    chunk_size: int = 2**8
     quality: str = "480p"
     _stream_url: Union[str, None] = None
 
@@ -28,23 +28,25 @@ class _TwitchHandler():
         try:
             stream_hls = streamlink.streams(self.twitch_url)
         except streamlink.exceptions.NoPluginError:
-            raise ValueError(f"No stream availabe for {self.twitch_url}")
+            raise ValueError(f"No stream available for {self.twitch_url}") from None
         if self.quality not in stream_hls:
             raise ValueError("The stream has not the given quality")
         self._stream_url = stream_hls[self.quality].url
 
 
 @dataclass
-class _TwitchHandlerAudio():
+class _TwitchHandlerAudio:
     """Default values for audio"""
+
     rate: int = 16000  # sampling rate in Hz
     segment_length: float = 2  # length of the audio segment
     quality: str = "audio_only"
 
 
 @dataclass
-class _TwitchHandlerVideo():
+class _TwitchHandlerVideo:
     """Default values for video"""
+
     rate: int = 30  # sampling rate in Hz
     quality: str = "480p"
 
@@ -52,6 +54,7 @@ class _TwitchHandlerVideo():
 @dataclass
 class _TwitchHandlerGrabber(_TwitchHandler):
     """Parent class for the Audio and Image Grabber"""
+
     queue_size: int = 1000
     blocking: bool = False
     _th_reader: Union[Thread, None] = field(init=False)
@@ -60,38 +63,51 @@ class _TwitchHandlerGrabber(_TwitchHandler):
     _reshape_size: Union[list, None] = field(init=False)
     dtype: type = field(init=False)
     _terminate: bool = False
-    _ffmpeg_thread: Union[Thread, None] = field(init=False)
+    _ffmpeg_process: Union[subprocess.Popen, None] = field(init=False)
     _auto_start: bool = True
 
     def __post_init__(self):
         self._fifo = queue.Queue(maxsize=self.queue_size)
+        self._ffmpeg_process = None
+        self._th_reader = None
 
     def terminate(self):
+        """Stop the reader thread and terminate the ffmpeg process"""
         self._terminate = True
-        self._ffmpeg_thread.terminate()
+        if self._ffmpeg_process is not None:
+            self._ffmpeg_process.terminate()
+            try:
+                self._ffmpeg_process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self._ffmpeg_process.kill()
 
     def _reader(self):
-        """Launch the ffmpeg thread and read its output pipe
-        and store it into a queue"""
-        self._ffmpeg_thread = subprocess.Popen(
+        """Launch the ffmpeg process, read its output pipe, and store it into a queue"""
+        self._ffmpeg_process = subprocess.Popen(
             self._cmd_pipe,
             stderr=subprocess.DEVNULL,
             stdout=subprocess.PIPE,
-            bufsize=10**8
+            bufsize=10**8,
         )
-        payload = self._ffmpeg_thread.stdout.read(self._n_bytes_per_payload)
-        self._fifo.put(payload)
-        while payload:
-            if not self.terminate:
-                return
-            payload = self._ffmpeg_thread.stdout.read(self._n_bytes_per_payload)
-            self._fifo.put(payload)
+
+        try:
+            while not self._terminate:
+                payload = self._ffmpeg_process.stdout.read(self._n_bytes_per_payload)
+                if not payload:
+                    break
+                self._fifo.put(payload)
+        finally:
+            if self._ffmpeg_process.stdout:
+                self._ffmpeg_process.stdout.close()
+            self._ffmpeg_process.terminate()
+            self._ffmpeg_process.wait()
+            self._ffmpeg_process = None
 
     def _start_thread(self):
         self._th_reader = Thread(target=self._reader, args=(), daemon=True)
         self._th_reader.start()
 
-    def grab(self) -> Union[None, np.array]:
+    def grab(self) -> Union[None, np.ndarray]:
         """Return the image or audio segment"""
         if self._fifo.empty() and not self.blocking:
             return None
@@ -99,26 +115,24 @@ class _TwitchHandlerGrabber(_TwitchHandler):
             in_bytes = self._fifo.get()
             return self._bytes_to_array(in_bytes)
 
-    def grab_raw(self) -> bytes:
+    def grab_raw(self) -> Union[bytes, None]:
         if self._fifo.empty() and not self.blocking:
             return None
         else:
             return self._fifo.get()
 
-    def _bytes_to_array(self, in_bytes: bytes) -> np.array:
+    def _bytes_to_array(self, in_bytes: bytes) -> np.ndarray:
         """
         Args:
             - in_bytes (bytes): audio segment or frame as bytes
 
         Returns:
-        the frame as a np.array (RGB)
-        or a segment as a np.array
+        the frame as a np.ndarray (RGB)
+        or a segment as a np.ndarray
         """
 
         try:
-            out = (
-                np.frombuffer(in_bytes, self.dtype).reshape(self._reshape_size)
-            )
+            out = np.frombuffer(in_bytes, self.dtype).reshape(self._reshape_size)
             return out
         except ValueError:
             return None
