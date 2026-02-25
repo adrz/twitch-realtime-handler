@@ -27,7 +27,7 @@ if __name__ == "__main__":
         if img is not None:
             t = time.time()
             face_locations = face_recognition.face_locations(img)
-            print(f"inference time: {time.time()-t}")
+            print(f"inference time: {time.time() - t}")
 
             for face in face_locations:
                 top, right, bottom, left = face
